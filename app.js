@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
+const { readdirSync } = require("fs");
 require('./DB/Conn');
 dotenv.config({path:'./config.env'});
 
@@ -12,8 +13,10 @@ const xssClean = require('xss-clean');
 const expressMongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
+const AuthMiddleware = require('./Middleware/AuthMiddleware');
 
 //security middleware implement
+app.use('/Public/Uploads',express.static(__dirname + '/Public/Uploads'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
@@ -21,6 +24,7 @@ app.use(xssClean());
 app.use(expressMongoSanitize());
 app.use(helmet());
 app.use(hpp());
+app.use(AuthMiddleware)
 
 // request rate limiting 
 const limiter = rateLimit({
@@ -30,6 +34,10 @@ const limiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 app.use(limiter);
+
+// routes middleware
+
+readdirSync("./Routers").map(r => app.use("/api/v1", require(`./Routers/${r}`))) 
 
 
 module.exports = app ;
