@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-
 const {
   Registration,
   Login,
@@ -15,7 +14,7 @@ const {
   UserRequestList,
   UserApprovedList,
   UpdateUserStatus,
-  UserImageUpdate,
+  // UserImageUpdate,
   StudentList,
   StudentCount,
   UpdateUserRole,
@@ -39,40 +38,42 @@ const {
   CountByFoodDepartment,
 } = require("../Controllers/UserController");
 
-// MANAGE PHOTO WITH MULTER NPM PACKAGE
+const { uploadImages } = require("../Controllers/profileImageUpload");
+const imageUpload = require("../Middleware/imageUpload");
 
-const FILE_TYPE_MAP = {
-  "image/png": "png",
-  "image/jpeg": "jpeg",
-  "image/jpg": "jpg",
-};
+// // MANAGE PHOTO WITH MULTER NPM PACKAGE
+// const FILE_TYPE_MAP = {
+//   "image/png": "png",
+//   "image/jpeg": "jpeg",
+//   "image/jpg": "jpg",
+// };
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const IsValid = FILE_TYPE_MAP[file.mimetype];
-    let UploadError = new Error("Invalid Image Type ");
-    if (IsValid) {
-      UploadError = null;
-    }
-    cb(UploadError, "Public/Uploads");
-  },
-  filename: function (req, file, cb) {
-    const fileName = file.originalname.split(" ").join("-");
-    const extension = FILE_TYPE_MAP[file.mimetype];
-    cb(null, `${fileName}-${Date.now()}.${extension}`);
-  },
-});
-const UploadOptions = multer({ storage: storage });
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     const IsValid = FILE_TYPE_MAP[file.mimetype];
+//     let UploadError = new Error("Invalid Image Type ");
+//     if (IsValid) {
+//       UploadError = null;
+//     }
+//     cb(UploadError, "Public/Uploads");
+//   },
+//   filename: function (req, file, cb) {
+//     const fileName = file.originalname.split(" ").join("-");
+//     const extension = FILE_TYPE_MAP[file.mimetype];
+//     cb(null, `${fileName}-${Date.now()}.${extension}`);
+//   },
+// });
+// const UploadOptions = multer({ storage: storage });
 
 router.post("/Registration", Registration);
 router.get("/Login", Login);
 router.get("/User/GetSingleUser/:Id", GetSingleUser);
 router.post("/User/UpdateUser/:Id", UpdateUser);
-router.post(
-  "/User/UserImageUpdate/:Id",
-  UploadOptions.single("image"),
-  UserImageUpdate
-);
+// router.post(
+//   "/User/UserImageUpdate/:Id",
+//   UploadOptions.single("image"),
+//   UserImageUpdate
+// );
 
 router.post("/User/DeleteUser/:Id", DeleteUser);
 router.get("/User/GetUserList", GetUserList);
@@ -83,6 +84,12 @@ router.post("/User/UpdateUserStatus/:id/:status", UpdateUserStatus);
 
 // CHANGE USER ROLE (STUDENT/TEACHER)
 router.post("/User/UpdateUserRole/:id/:role", UpdateUserRole);
+
+router.post("/User/profileImage", imageUpload, uploadImages);
+
+router.post("/User/DeleteUser/:Id", DeleteUser);
+router.get("/User/GetUserList", GetUserList);
+router.get("/User/TotalUserCount", TotalUserCount);
 
 // REQUEST COUNT AND LIST
 router.get("/User/UserRequestCount", UserRequestCount);
@@ -103,7 +110,10 @@ router.get("/User/TeacherList", TeacherList);
 // SEARCH BY DEPARTMENT / SESSION / (TEACHER / STUDENT) / NAME
 router.get("/User/SearchByDepartment/:keyword", SearchByDepartment);
 router.get("/User/SearchBySession/:session", SearchBySession);
-router.get("/User/SearchByTeacherAndStudent/:keyword", SearchByTeacherAndStudent);
+router.get(
+  "/User/SearchByTeacherAndStudent/:keyword",
+  SearchByTeacherAndStudent
+);
 router.get("/User/SearchByName/:keyword", SearchByName);
 
 //  LIST BY SINGLE DEPARTMENT
@@ -121,7 +131,5 @@ router.get("/User/CountByCivilDepartment", CountByCivilDepartment);
 router.get("/User/CountByElectricalDepartment", CountByElectricalDepartment);
 router.get("/User/CountByTourismDepartment", CountByTourismDepartment);
 router.get("/User/CountByFoodDepartment", CountByFoodDepartment);
-
-
 
 module.exports = router;
