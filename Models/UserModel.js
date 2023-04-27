@@ -8,15 +8,15 @@ const UserSchema = new mongoose.Schema(
     },
     fatherName: {
       type: String,
-      required: [true, "Enter your father name!"],
+      default:"",
     },
     motherName: {
       type: String,
-      required: [true, "Enter your mother name!"],
+      default:"",
     },
     image: {
       type: String,
-      default: "",
+      default: "https://res.cloudinary.com/db8l1ulfq/image/upload/v1682591922/user-profile_tfugwz.png",
     },
     departmentName: {
       type: String,
@@ -24,11 +24,11 @@ const UserSchema = new mongoose.Schema(
     },
     rollNumber: {
       type: Number,
-      required: [true, "Enter your roll number!"],
+      default:"",
     },
     registrationNumber: {
       type: Number,
-      required: [true, "Enter your registration number!"],
+      default:"",
     },
     email: {
       type: String,
@@ -39,8 +39,16 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Enter your session!"],
     },
     mobile: {
-      type: Number,
+      type: String,
       required: [true, "Enter your mobile number!"],
+    },
+    whatsappNumber:{
+      type: Number,
+      default:"",
+    },
+    facebookLink:{
+      type: String,
+      default:"",
     },
     password: {
       type: String,
@@ -52,19 +60,19 @@ const UserSchema = new mongoose.Schema(
     },
     companyName: {
       type: String,
-      required: [true, "Enter your company name!"],
+      default:"",
     },
     jobPosition: {
       type: String,
-      required: [true, "Enter your your job position!"],
+      default:"",
     },
-    divisionName: {
+    jobLocation: {
       type: String,
-      required: [true, "Enter your division name!"],
+      default:"",
     },
-    district: {
-      type: String,
-      required: [true, "Enter your district name!"],
+    role:{
+      type:String,
+      default:"student"
     },
     isAdmin: {
       type: Boolean,

@@ -3,7 +3,7 @@ const router = express.Router();
 const multer  = require('multer')
 
 
-const { Registration, Login, GetSingleUser, UpdateUser, GetUserList, DeleteUser, TotalUserCount, UserRequestCount, UserApprovedCount, UserRequestList, UserApprovedList, UpdateUserStatus } = require("../Controllers/UserController");
+const { Registration, Login, GetSingleUser, UpdateUser, GetUserList, DeleteUser, TotalUserCount, UserRequestCount, UserApprovedCount, UserRequestList, UserApprovedList, UpdateUserStatus, UserImageUpdate } = require("../Controllers/UserController");
 
 
 // MANAGE PHOTO WITH MULTER NPM PACKAGE
@@ -32,11 +32,13 @@ const storage = multer.diskStorage({
 const UploadOptions = multer({ storage: storage })
 
 
-router.post('/Registration',UploadOptions.single('image'),Registration)
+router.post('/Registration',Registration)
 router.get('/Login',Login)
 router.get('/User/GetSingleUser/:Id',GetSingleUser)
-router.post('/User/UpdateUser/:id',UpdateUser)
-router.post('/User/DeleteUser/:id',DeleteUser)
+router.post('/User/UpdateUser/:Id',UpdateUser)
+router.post('/User/UserImageUpdate/:Id',UploadOptions.single('image'),UserImageUpdate)
+
+router.post('/User/DeleteUser/:Id',DeleteUser)
 router.get('/User/GetUserList',GetUserList)
 router.get('/User/TotalUserCount',TotalUserCount)
 
