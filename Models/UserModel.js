@@ -24,11 +24,11 @@ const UserSchema = new mongoose.Schema(
     },
     rollNumber: {
       type: Number,
-      default:"",
+      default:0,
     },
     registrationNumber: {
       type: Number,
-      default:"",
+      default:0,
     },
     email: {
       type: String,
@@ -44,7 +44,7 @@ const UserSchema = new mongoose.Schema(
     },
     whatsappNumber:{
       type: Number,
-      default:"",
+      default:0,
     },
     facebookLink:{
       type: String,
@@ -72,7 +72,7 @@ const UserSchema = new mongoose.Schema(
     },
     role:{
       type:String,
-      default:"student"
+      default:"Student"
     },
     isAdmin: {
       type: Boolean,

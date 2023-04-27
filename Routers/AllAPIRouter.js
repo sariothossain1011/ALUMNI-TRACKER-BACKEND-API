@@ -1,63 +1,126 @@
-const express =require("express");
+const express = require("express");
 const router = express.Router();
-const multer  = require('multer')
+const multer = require("multer");
 
-
-const { Registration, Login, GetSingleUser, UpdateUser, GetUserList, DeleteUser, TotalUserCount, UserRequestCount, UserApprovedCount, UserRequestList, UserApprovedList, UpdateUserStatus, UserImageUpdate } = require("../Controllers/UserController");
-
+const {
+  Registration,
+  Login,
+  GetSingleUser,
+  UpdateUser,
+  GetUserList,
+  DeleteUser,
+  TotalUserCount,
+  UserRequestCount,
+  UserApprovedCount,
+  UserRequestList,
+  UserApprovedList,
+  UpdateUserStatus,
+  UserImageUpdate,
+  StudentList,
+  StudentCount,
+  UpdateUserRole,
+  TeacherCount,
+  TeacherList,
+  SearchByDepartment,
+  SearchBySession,
+  SearchByTeacherAndStudent,
+  SearchByName,
+  ListByComputerDepartment,
+  ListByCivilDepartment,
+  ListByRACDepartment,
+  ListByElectricalDepartment,
+  ListByTourismDepartment,
+  ListByFoodDepartment,
+  CountByComputerDepartment,
+  CountByRACDepartment,
+  CountByCivilDepartment,
+  CountByElectricalDepartment,
+  CountByTourismDepartment,
+  CountByFoodDepartment,
+} = require("../Controllers/UserController");
 
 // MANAGE PHOTO WITH MULTER NPM PACKAGE
 
 const FILE_TYPE_MAP = {
-    'image/png': 'png',
-    'image/jpeg': 'jpeg',
-    'image/jpg': 'jpg',
-}
+  "image/png": "png",
+  "image/jpeg": "jpeg",
+  "image/jpg": "jpg",
+};
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const IsValid = FILE_TYPE_MAP[file.mimetype];
-    let UploadError =new Error('Invalid Image Type ');
-    if(IsValid){
-        UploadError = null
+    let UploadError = new Error("Invalid Image Type ");
+    if (IsValid) {
+      UploadError = null;
     }
-    cb(UploadError, 'Public/Uploads')
+    cb(UploadError, "Public/Uploads");
   },
   filename: function (req, file, cb) {
-    const fileName = file.originalname.split(' ').join('-')
-    const extension = FILE_TYPE_MAP[file.mimetype]
-    cb(null, `${fileName}-${Date.now()}.${extension}`)
-  }
-})
-const UploadOptions = multer({ storage: storage })
+    const fileName = file.originalname.split(" ").join("-");
+    const extension = FILE_TYPE_MAP[file.mimetype];
+    cb(null, `${fileName}-${Date.now()}.${extension}`);
+  },
+});
+const UploadOptions = multer({ storage: storage });
 
+router.post("/Registration", Registration);
+router.get("/Login", Login);
+router.get("/User/GetSingleUser/:Id", GetSingleUser);
+router.post("/User/UpdateUser/:Id", UpdateUser);
+router.post(
+  "/User/UserImageUpdate/:Id",
+  UploadOptions.single("image"),
+  UserImageUpdate
+);
 
-router.post('/Registration',Registration)
-router.get('/Login',Login)
-router.get('/User/GetSingleUser/:Id',GetSingleUser)
-router.post('/User/UpdateUser/:Id',UpdateUser)
-router.post('/User/UserImageUpdate/:Id',UploadOptions.single('image'),UserImageUpdate)
+router.post("/User/DeleteUser/:Id", DeleteUser);
+router.get("/User/GetUserList", GetUserList);
+router.get("/User/TotalUserCount", TotalUserCount);
 
-router.post('/User/DeleteUser/:Id',DeleteUser)
-router.get('/User/GetUserList',GetUserList)
-router.get('/User/TotalUserCount',TotalUserCount)
+// CHANGE USER STATUS (REQUEST/APPROVED)
+router.post("/User/UpdateUserStatus/:id/:status", UpdateUserStatus);
 
-// CHANGE USER STATUS 
-router.post('/User/UpdateUserStatus/:id/:status',UpdateUserStatus)
+// CHANGE USER ROLE (STUDENT/TEACHER)
+router.post("/User/UpdateUserRole/:id/:role", UpdateUserRole);
 
 // REQUEST COUNT AND LIST
-router.get('/User/UserRequestCount',UserRequestCount)
-router.get('/User/UserRequestList',UserRequestList)
+router.get("/User/UserRequestCount", UserRequestCount);
+router.get("/User/UserRequestList", UserRequestList);
 
 // APPROVED COUNT AND LIST
-router.get('/User/UserApprovedCount',UserApprovedCount)
-router.get('/User/UserApprovedList',UserApprovedList)
+router.get("/User/UserApprovedCount", UserApprovedCount);
+router.get("/User/UserApprovedList", UserApprovedList);
 
+// STUDENT COUNT AND LIST
+router.get("/User/StudentCount", StudentCount);
+router.get("/User/StudentList", StudentList);
 
+// TEACHER COUNT AND LIST
+router.get("/User/TeacherCount", TeacherCount);
+router.get("/User/TeacherList", TeacherList);
 
+// SEARCH BY DEPARTMENT / SESSION / (TEACHER / STUDENT) / NAME
+router.get("/User/SearchByDepartment/:keyword", SearchByDepartment);
+router.get("/User/SearchBySession/:session", SearchBySession);
+router.get("/User/SearchByTeacherAndStudent/:keyword", SearchByTeacherAndStudent);
+router.get("/User/SearchByName/:keyword", SearchByName);
 
+//  LIST BY SINGLE DEPARTMENT
+router.get("/User/ListByComputerDepartment", ListByComputerDepartment);
+router.get("/User/ListByRACDepartment", ListByRACDepartment);
+router.get("/User/ListByCivilDepartment", ListByCivilDepartment);
+router.get("/User/ListByElectricalDepartment", ListByElectricalDepartment);
+router.get("/User/ListByTourismDepartment", ListByTourismDepartment);
+router.get("/User/ListByFoodDepartment", ListByFoodDepartment);
 
-
+//  COUNT BY SINGLE DEPARTMENT
+router.get("/User/CountByComputerDepartment", CountByComputerDepartment);
+router.get("/User/CountByRACDepartment", CountByRACDepartment);
+router.get("/User/CountByCivilDepartment", CountByCivilDepartment);
+router.get("/User/CountByElectricalDepartment", CountByElectricalDepartment);
+router.get("/User/CountByTourismDepartment", CountByTourismDepartment);
+router.get("/User/CountByFoodDepartment", CountByFoodDepartment);
 
 
 

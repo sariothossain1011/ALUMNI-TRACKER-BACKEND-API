@@ -10,6 +10,7 @@ function AuthMiddleware(req, res, next) {
     path: [
       {
         url: /\/api\/v1\/User(.*)/,methods: ["GET","POST","OPTIONS"],
+        url: /\/api\/v1\/Teacher(.*)/,methods: ["GET","POST","OPTIONS"],
       },
       "/api/v1/Registration",
       "/api/v1/Login",
