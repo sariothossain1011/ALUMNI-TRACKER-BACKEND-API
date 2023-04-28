@@ -7,32 +7,58 @@ const mongoose = require("mongoose");
 exports.Registration = async (req, res) => {
   console.log(`req.body: ${req.body}`);
   try {
+    const existUser = await UserModel.findOne({ email: req.body.email });
+    if (existUser) {
+      return res
+        .status(400)
+        .json({ message: "This email already exist. Try another one." });
+    }
+
     const userItem = await UserModel({
       name: req.body.name,
-      // fatherName: "",
-      // motherName: "",
+      fatherName: "",
+      motherName: "",
       rollNumber: req.body.roll,
       registrationNumber: req.body.registration,
       email: req.body.email,
-      // session: "",
+      session: "",
       mobile: req.body.mobile,
-      // whatsappNumber: "",
-      // facebookLink: "",
+      whatsappNumber: "",
+      facebookLink: "",
       password: bcrypt.hashSync(req.body.password, 10),
       status: req.body.status,
-      // companyName: "",
-      // jobPosition: "",
-      // jobLocation: "",
+      companyName: "",
+      jobPosition: "",
+      jobLocation: "",
       role: req.body.role,
       isAdmin: false,
     });
+
     const user = await userItem.save();
     if (!user) {
       return res
         .status(400)
         .send({ success: false, message: "Registration fail" });
     }
-    res.status(200).json({ message: "success", user: user });
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        isAdmin: user.isAdmin,
+      },
+      process.env.TOKEN_SECRET,
+      { expiresIn: "3d" }
+    );
+    res.status(200).json({
+      id: user._id,
+      image: user.image,
+      name: user.name,
+      token: token,
+      email: user.email,
+      role: user.role,
+      status: user.status,
+      isAdmin: user.isAdmin,
+      message: "success",
+    });
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
   }
@@ -41,24 +67,35 @@ exports.Registration = async (req, res) => {
 // USERS LOGIN API
 exports.Login = async (req, res) => {
   try {
-    const user = await UserModel.findOne({ email: req.body.email });
-    const secret = process.env.SECRET_KEY;
+    const { email, password } = req.body;
+
+    const user = await UserModel.findOne({ email: email });
     if (!user) {
-      return res.status(400).json("The user not found");
+      return res.status(400).json("This user not found");
     }
-    if (user && bcrypt.compareSync(req.body.password, user.password)) {
+    if (user && bcrypt.compareSync(password, user.password)) {
       const token = jwt.sign(
         {
           userId: user.id,
           isAdmin: user.isAdmin,
         },
-        secret,
-        { expiresIn: "1d" }
+        process.env.TOKEN_SECRET,
+        { expiresIn: "3d" }
       );
 
-      return res.status(200).json({ user: user.email, token: token });
+      res.status(200).json({
+        id: user._id,
+        image: user.image,
+        name: user.name,
+        token: token,
+        email: user.email,
+        role: user.role,
+        status: user.status,
+        isAdmin: user.isAdmin,
+        message: "success",
+      });
     } else {
-      res.status(400).json("Password is wrong");
+      res.status(400).json("Email or Password is wrong");
     }
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
@@ -68,7 +105,7 @@ exports.Login = async (req, res) => {
 // GET SINGLE USER  API
 exports.GetSingleUser = async (req, res) => {
   try {
-    const id = req.params.id
+    const id = req.params.id;
     const user = await UserModel.findById(id).select("-password");
     if (!user) {
       res
@@ -256,7 +293,7 @@ exports.StudentList = async (req, res) => {
 exports.StudentCount = async (req, res) => {
   try {
     const StudentCount = await UserModel.countDocuments({
-      role: "Student" ,
+      role: "Student",
     });
     if (!StudentCount) {
       res.status(500).json({ success: false });
@@ -288,10 +325,10 @@ exports.TeacherList = async (req, res) => {
 exports.TeacherCount = async (req, res) => {
   try {
     const TeacherCount = await UserModel.countDocuments({
-      role: "Teacher"  ,
+      role: "Teacher",
     });
     if (!TeacherCount) {
-      res.status(500).json({ success: false  });
+      res.status(500).json({ success: false });
     } else {
       res.status(200).json({ TeacherCount });
     }
@@ -341,63 +378,58 @@ exports.UpdateUserRole = async (req, res) => {
       return res.status(400).json({ success: false, message: error });
     });
 };
- 
-// SEARCH BY DEPARTMENT API 
-exports.SearchByDepartment=async(req,res)=>{
+
+// SEARCH BY DEPARTMENT API
+exports.SearchByDepartment = async (req, res) => {
   try {
     const { keyword } = req.params;
     const results = await UserModel.find({
-      $or: [
-        { departmentName: { $regex: keyword, $options: "i" } },
-      ],
+      $or: [{ departmentName: { $regex: keyword, $options: "i" } }],
     }).select("-password");
     res.json(results);
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
-// SEARCH BY SESSION API 
-exports.SearchBySession=async(req,res)=>{
+// SEARCH BY SESSION API
+exports.SearchBySession = async (req, res) => {
   try {
     const { session } = req.params;
-    const results = await UserModel.find({ session: { $eq: session } }).select("-password");
+    const results = await UserModel.find({ session: { $eq: session } }).select(
+      "-password"
+    );
     res.json(results);
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
-// SEARCH BY TEACHER / STUDENT API 
-exports.SearchByTeacherAndStudent=async(req,res)=>{
+// SEARCH BY TEACHER / STUDENT API
+exports.SearchByTeacherAndStudent = async (req, res) => {
   try {
     const { keyword } = req.params;
     const results = await UserModel.find({
-      $or: [
-        { role: { $regex: keyword, $options: "i" } },
-      ],
+      $or: [{ role: { $regex: keyword, $options: "i" } }],
     }).select("-password");
     res.json(results);
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
+};
 
-// SEARCH BY NAME API 
-exports.SearchByName=async(req,res)=>{
+// SEARCH BY NAME API
+exports.SearchByName = async (req, res) => {
   try {
     const { keyword } = req.params;
     const results = await UserModel.find({
-      $or: [
-        { name: { $regex: keyword, $options: "i" } },
-      ],
+      $or: [{ name: { $regex: keyword, $options: "i" } }],
     }).select("-password");
     res.json(results);
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
   }
-}
-
+};
 
 // LIST BY DEPARTMENT (COMPUTER/RAC/CIVIL/ELECTRICAL/TOURISM/FOOD)
 exports.ListByComputerDepartment = async (req, res) => {
@@ -418,9 +450,7 @@ exports.ListByRACDepartment = async (req, res) => {
   try {
     const List = await UserModel.find({ departmentName: "RAC" });
     if (!List) {
-      res
-        .status(500)
-        .json({ success: false, message: "Not found RAC List" });
+      res.status(500).json({ success: false, message: "Not found RAC List" });
     } else {
       res.status(200).json(List);
     }
@@ -432,9 +462,7 @@ exports.ListByCivilDepartment = async (req, res) => {
   try {
     const List = await UserModel.find({ departmentName: "Civil" });
     if (!List) {
-      res
-        .status(500)
-        .json({ success: false, message: "Not found Civil List" });
+      res.status(500).json({ success: false, message: "Not found Civil List" });
     } else {
       res.status(200).json(List);
     }
@@ -474,9 +502,7 @@ exports.ListByFoodDepartment = async (req, res) => {
   try {
     const List = await UserModel.find({ departmentName: "Food" });
     if (!List) {
-      res
-        .status(500)
-        .json({ success: false, message: "Not found Food List" });
+      res.status(500).json({ success: false, message: "Not found Food List" });
     } else {
       res.status(200).json(List);
     }
@@ -488,9 +514,13 @@ exports.ListByFoodDepartment = async (req, res) => {
 // COUNT BY DEPARTMENT (COMPUTER/RAC/CIVIL/ELECTRICAL/TOURISM/FOOD)
 exports.CountByComputerDepartment = async (req, res) => {
   try {
-    const Count = await UserModel.countDocuments({ departmentName: "Computer" });
+    const Count = await UserModel.countDocuments({
+      departmentName: "Computer",
+    });
     if (!Count) {
-      res.status(500).json({ success: false ,message:"Not found Computer department"});
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Computer department" });
     } else {
       res.status(200).json({ Count });
     }
@@ -502,7 +532,9 @@ exports.CountByRACDepartment = async (req, res) => {
   try {
     const Count = await UserModel.countDocuments({ departmentName: "RAC" });
     if (!Count) {
-      res.status(500).json({ success: false ,message:"Not found RAC department"});
+      res
+        .status(500)
+        .json({ success: false, message: "Not found RAC department" });
     } else {
       res.status(200).json({ Count });
     }
@@ -514,7 +546,9 @@ exports.CountByCivilDepartment = async (req, res) => {
   try {
     const Count = await UserModel.countDocuments({ departmentName: "Civil" });
     if (!Count) {
-      res.status(500).json({ success: false ,message:"Not found Civil department"});
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Civil department" });
     } else {
       res.status(200).json({ Count });
     }
@@ -524,9 +558,13 @@ exports.CountByCivilDepartment = async (req, res) => {
 };
 exports.CountByElectricalDepartment = async (req, res) => {
   try {
-    const Count = await UserModel.countDocuments({ departmentName: "Electrical" });
+    const Count = await UserModel.countDocuments({
+      departmentName: "Electrical",
+    });
     if (!Count) {
-      res.status(500).json({ success: false ,message:"Not found Electrical department"});
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Electrical department" });
     } else {
       res.status(200).json({ Count });
     }
@@ -538,7 +576,9 @@ exports.CountByTourismDepartment = async (req, res) => {
   try {
     const Count = await UserModel.countDocuments({ departmentName: "Tourism" });
     if (!Count) {
-      res.status(500).json({ success: false ,message:"Not found Tourism department"});
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Tourism department" });
     } else {
       res.status(200).json({ Count });
     }
@@ -550,7 +590,9 @@ exports.CountByFoodDepartment = async (req, res) => {
   try {
     const Count = await UserModel.countDocuments({ departmentName: "Food" });
     if (!Count) {
-      res.status(500).json({ success: false ,message:"Not found Food department"});
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Food department" });
     } else {
       res.status(200).json({ Count });
     }
@@ -558,7 +600,3 @@ exports.CountByFoodDepartment = async (req, res) => {
     return res.status(400).json({ success: false, message: error });
   }
 };
-
-
-
-
