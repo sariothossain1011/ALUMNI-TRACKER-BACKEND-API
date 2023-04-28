@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 // USERS REGISTRATION API
 exports.Registration = async (req, res) => {
   try {
-    console.log(`req.body: ${req.body}`);
+    console.log(`req.body: ${req.body.name}, ${req.body.email}`);
     const existUser = await UserModel.findOne({ email: req.body.email });
     if (existUser) {
       return res
