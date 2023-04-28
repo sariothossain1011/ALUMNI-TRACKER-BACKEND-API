@@ -8,27 +8,24 @@ const UserSchema = new mongoose.Schema(
     },
     fatherName: {
       type: String,
-      default:"",
     },
     motherName: {
       type: String,
-      default:"",
     },
     image: {
       type: String,
-      default: "https://res.cloudinary.com/db8l1ulfq/image/upload/v1682591922/user-profile_tfugwz.png",
+      default:
+        "https://res.cloudinary.com/db8l1ulfq/image/upload/v1682591922/user-profile_tfugwz.png",
     },
     departmentName: {
       type: String,
-      required: [true, "Enter your department name!"],
+      // required: [true, "Enter your department name!"],
     },
     rollNumber: {
-      type: Number,
-      default:0,
+      type: String,
     },
     registrationNumber: {
-      type: Number,
-      default:0,
+      type: String,
     },
     email: {
       type: String,
@@ -36,19 +33,15 @@ const UserSchema = new mongoose.Schema(
     },
     session: {
       type: String,
-      required: [true, "Enter your session!"],
     },
     mobile: {
       type: String,
-      required: [true, "Enter your mobile number!"],
     },
-    whatsappNumber:{
-      type: Number,
-      default:0,
-    },
-    facebookLink:{
+    whatsappNumber: {
       type: String,
-      default:"",
+    },
+    facebookLink: {
+      type: String,
     },
     password: {
       type: String,
@@ -60,26 +53,23 @@ const UserSchema = new mongoose.Schema(
     },
     companyName: {
       type: String,
-      default:"",
     },
     jobPosition: {
       type: String,
-      default:"",
     },
     jobLocation: {
       type: String,
-      default:"",
     },
-    role:{
-      type:String,
-      default:"Student"
+    role: {
+      type: String,
+      default: "student",
     },
     isAdmin: {
       type: Boolean,
       default: false,
     },
   },
-  { timestamps: false, versionKey: false }
+  { timestamps: true, versionKey: false }
 );
 
 UserSchema.virtual("id").get(function () {
@@ -91,5 +81,5 @@ UserSchema.set("toJSON", {
   getters: true, // Use getters option instead
 });
 
-const UserModel = mongoose.model("user", UserSchema);
+const UserModel = mongoose.model("User", UserSchema);
 module.exports = UserModel;

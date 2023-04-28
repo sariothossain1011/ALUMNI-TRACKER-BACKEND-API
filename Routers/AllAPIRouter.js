@@ -76,7 +76,6 @@ router.post("/User/UpdateUser/:id", UpdateUser);
 //   UserImageUpdate
 // );
 
-
 router.post("/Admin/DeleteUser/:Id", DeleteUser);
 router.get("/User/GetUserList", GetUserList);
 router.get("/User/TotalUserCount", TotalUserCount);
@@ -93,7 +92,6 @@ router.post("/Admin/UpdateIsAdmin/:id/:isAdmin", UpdateIsAdmin);
 router.post("/User/profileImage", imageUpload, uploadImages);
 
 router.post("/DeleteUser/:Id", DeleteUser);
-
 
 // REQUEST COUNT AND LIST
 router.get("/User/UserRequestCount", UserRequestCount);
@@ -114,7 +112,10 @@ router.get("/User/TeacherList", TeacherList);
 // SEARCH BY DEPARTMENT / SESSION / (TEACHER / STUDENT) / NAME
 router.get("/User/SearchByDepartment/:keyword", SearchByDepartment);
 router.get("/User/SearchBySession/:session", SearchBySession);
-router.get("/User/SearchByTeacherAndStudent/:keyword",SearchByTeacherAndStudent);
+router.get(
+  "/User/SearchByTeacherAndStudent/:keyword",
+  SearchByTeacherAndStudent
+);
 router.get("/User/SearchByName/:keyword", SearchByName);
 
 //  LIST BY SINGLE DEPARTMENT
