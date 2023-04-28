@@ -68,10 +68,11 @@ exports.Login = async (req, res) => {
 // GET SINGLE USER  API
 exports.GetSingleUser = async (req, res) => {
   try {
-    const user = await UserModel.findOne(req.params.id).select("-password");
+    const id = req.params.id
+    const user = await UserModel.findById(id).select("-password");
     if (!user) {
       res
-        .status(500)
+        .status(400)
         .json({ success: false, message: "The user is not found" });
     } else {
       res.status(200).send(user);
@@ -84,7 +85,7 @@ exports.GetSingleUser = async (req, res) => {
 // // GET UPDATE USER  API
 exports.UpdateUser = async (req, res) => {
   try {
-    const id = req.params.Id;
+    const id = req.params.id;
     const postBody = req.body;
     const user = await UserModel.findByIdAndUpdate(id, postBody, {
       new: true,
@@ -99,7 +100,8 @@ exports.UpdateUser = async (req, res) => {
     return res.status(400).json({ success: false, message: error });
   }
 };
-// Create Product API
+
+// // Create Product API
 // exports.UserImageUpdate = async (req, res) => {
 //   try {
 //     const file = req.file;
@@ -202,7 +204,7 @@ exports.UserRequestList = async (req, res) => {
   }
 };
 
-// USER REQUEST API
+// USER REQUEST COUNT API
 exports.UserApprovedCount = async (req, res) => {
   try {
     const ApprovedCount = await UserModel.countDocuments({
@@ -218,7 +220,7 @@ exports.UserApprovedCount = async (req, res) => {
   }
 };
 
-// USER Approved List API
+// USER APPROVED LIST
 exports.UserApprovedList = async (req, res) => {
   try {
     const ApprovedList = await UserModel.find({ status: "Approved" });
@@ -234,129 +236,329 @@ exports.UserApprovedList = async (req, res) => {
   }
 };
 
+// USER STUDENT LIST API
+exports.StudentList = async (req, res) => {
+  try {
+    const StudentList = await UserModel.find({ role: "Student" });
+    if (!StudentList) {
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Student List" });
+    } else {
+      res.status(200).json({ StudentList });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+
+// USER STUDENT COUNT API
+exports.StudentCount = async (req, res) => {
+  try {
+    const StudentCount = await UserModel.countDocuments({
+      role: "Student" ,
+    });
+    if (!StudentCount) {
+      res.status(500).json({ success: false });
+    } else {
+      res.status(200).json({ StudentCount });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+
+// USER TEACHER LIST API
+exports.TeacherList = async (req, res) => {
+  try {
+    const TeacherList = await UserModel.find({ role: "Teacher" });
+    if (!TeacherList) {
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Teacher List" });
+    } else {
+      res.status(200).json({ TeacherList });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+
+// USER TEACHER COUNT API
+exports.TeacherCount = async (req, res) => {
+  try {
+    const TeacherCount = await UserModel.countDocuments({
+      role: "Teacher"  ,
+    });
+    if (!TeacherCount) {
+      res.status(500).json({ success: false  });
+    } else {
+      res.status(200).json({ TeacherCount });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+
+// UPDATE USER STATUS REQUEST/APPROVED API
 exports.UpdateUserStatus = async (req, res) => {
   const id = req.params.id;
   const status = req.body.status;
 
   UserModel.findByIdAndUpdate(id, { $set: { status: status } }, { new: true })
-    .then((updatedUser) => {
-      res.status(200).json(updatedUser);
+    .then((updatedUserStatus) => {
+      res.status(200).json(updatedUserStatus);
     })
     .catch((error) => {
       return res.status(400).json({ success: false, message: error });
     });
 };
 
-// exports.SearchKeyword=async(req,res)=>{
-//   try{
-//       let pageNo = Number(req.params.pageNo);
-//       let perPage = Number(req.params.perPage);
-//       let searchValue = req.params.searchKeyword;
-//       let skipRow = (pageNo - 1) * perPage;
+// UPDATE IS ADMIN (USER TO ADMIN /ADMIN OT USER) API
+exports.UpdateIsAdmin = async (req, res) => {
+  const id = req.params.id;
+  const isAdmin = req.body.isAdmin;
 
-//       let data;
-//       if (searchValue!=="0") {
+  UserModel.findByIdAndUpdate(id, { $set: { isAdmin: isAdmin } }, { new: true })
+    .then((UpdateIsAdmin) => {
+      res.status(200).json(UpdateIsAdmin);
+    })
+    .catch((error) => {
+      return res.status(400).json({ success: false, message: error });
+    });
+};
 
-//           let SearchRgx = {"$regex": searchValue, "$options":"1"}
-//           let SearchQuery = {$or: [{title: SearchRgx}]}
+// UPDATE USER ROLE STUDENT/TEACHER API
+exports.UpdateUserRole = async (req, res) => {
+  const id = req.params.id;
+  const role = req.body.role;
 
-//           data = await ProductModel.aggregate([{
-//               $facet:{
-//                   Total:[{$match: SearchQuery},{$count: "count"}],
-//                   Rows:[{$match: SearchQuery},{$skip: skipRow}, {$limit: perPage}],
-//               }
-//           }])
-//       }
-//       else {
-//           data = await ProductModel.aggregate([{
-//               $facet:{
-//                   Total:[{$count: "count"}],
-//                   Rows:[{$skip: skipRow}, {$limit: perPage}],
-//               }
-//           }])
-//       }
-//       res.status(200).json({status: "success",data:data})
-//   }
-//   catch (error) {
-//       res.status(400).json({status: "fail",data:error})
-//   }
+  UserModel.findByIdAndUpdate(id, { $set: { role: role } }, { new: true })
+    .then((updatedUserRole) => {
+      res.status(200).json(updatedUserRole);
+    })
+    .catch((error) => {
+      return res.status(400).json({ success: false, message: error });
+    });
+};
+ 
+// SEARCH BY DEPARTMENT API 
+exports.SearchByDepartment=async(req,res)=>{
+  try {
+    const { keyword } = req.params;
+    const results = await UserModel.find({
+      $or: [
+        { departmentName: { $regex: keyword, $options: "i" } },
+      ],
+    }).select("-password");
+    res.json(results);
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
-// }
+// SEARCH BY SESSION API 
+exports.SearchBySession=async(req,res)=>{
+  try {
+    const { session } = req.params;
+    const results = await UserModel.find({ session: { $eq: session } }).select("-password");
+    res.json(results);
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
-// exports.UpdateUser = async (req, res) => {
-//   try {
-//     // if (!mongoose.isValidObjectId(req.params.id)) {
-//     //   return res.status(400).send("Invalid user Id");
-//     // }
-//     const user = await UserModel.updateOne(
-//       {id:req.params.id},
-//       {
-//         name: req.body.name ,
-//         fatherName: req.body.fatherName ,
-//         motherName: req.body.motherName ,
-//         departmentName: req.body.departmentName ,
-//         rollNumber: req.body.rollNumber ,
-//         registrationNumber:req.body.registrationNumber ,
-//         email: req.body.email,
-//         session: req.body.session ,
-//         mobile: req.body.mobile ,
-//         status: req.body.status ,
-//         jobPosition: req.body.jobPosition ,
-//         companyName: req.body.companyName ,
-//         divisionName: req.body.divisionName ,
-//         district: req.body.district,
-//         isAdmin: req.body.isAdmin ,
-//       },
-//       { new: true }
-//     ).select("-password");
-//     console.log(req.params.id)
+// SEARCH BY TEACHER / STUDENT API 
+exports.SearchByTeacherAndStudent=async(req,res)=>{
+  try {
+    const { keyword } = req.params;
+    const results = await UserModel.find({
+      $or: [
+        { role: { $regex: keyword, $options: "i" } },
+      ],
+    }).select("-password");
+    res.json(results);
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
-//     if (!user) {
-//       return res
-//         .status(404)
-//         .send({ success: false, message: "The user not update !" });
-//     }
-//     res.statue(200).send(user);
-//   } catch (error) {
-//     return res.status(400).json({ success: false, message: error });
-//   }
-// };
+// SEARCH BY NAME API 
+exports.SearchByName=async(req,res)=>{
+  try {
+    const { keyword } = req.params;
+    const results = await UserModel.find({
+      $or: [
+        { name: { $regex: keyword, $options: "i" } },
+      ],
+    }).select("-password");
+    res.json(results);
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
-// // USERS REGISTRATION API
-// exports.Registration = async (req, res) => {
-//   try {
-//     const file = req.file;
-//     if (!file) return res.status(400).send("No image in the request");
-//     const fileName = req.file.filename;
-//     const BasePath = `${req.protocol}://${req.get("host")}/Public/Uploads/`; //"http://localhost:3000/Public/Upload/
 
-//     const userItem = await UserModel({
-//       name: req.body.name,
-//       fatherName: req.body.fatherName,
-//       motherName: req.body.motherName,
-//       image: `${BasePath}${fileName}`, //"http://localhost:3000/Public/Upload/image-210423"
-//       departmentName: req.body.departmentName,
-//       rollNumber: req.body.rollNumber,
-//       registrationNumber: req.body.registrationNumber,
-//       email: req.body.email,
-//       session: req.body.session,
-//       mobile: req.body.mobile,
-//       password: bcrypt.hashSync(req.body.password, 10),
-//       status: req.body.status,
-//       jobPosition: req.body.jobPosition,
-//       companyName: req.body.companyName,
-//       divisionName: req.body.divisionName,
-//       district: req.body.district,
-//       isAdmin: req.body.isAdmin,
-//     });
-//     const user = await userItem.save();
-//     if (!user) {
-//       return res
-//         .status(400)
-//         .send({ success: false, message: "Registration fail" });
-//     }
-//     res.status(200).send(user);
-//   } catch (error) {
-//     return res.status(400).json({ success: false, message: error });
-//   }
-// };
+// LIST BY DEPARTMENT (COMPUTER/RAC/CIVIL/ELECTRICAL/TOURISM/FOOD)
+exports.ListByComputerDepartment = async (req, res) => {
+  try {
+    const List = await UserModel.find({ departmentName: "Computer" });
+    if (!List) {
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Computer List" });
+    } else {
+      res.status(200).json(List);
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.ListByRACDepartment = async (req, res) => {
+  try {
+    const List = await UserModel.find({ departmentName: "RAC" });
+    if (!List) {
+      res
+        .status(500)
+        .json({ success: false, message: "Not found RAC List" });
+    } else {
+      res.status(200).json(List);
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.ListByCivilDepartment = async (req, res) => {
+  try {
+    const List = await UserModel.find({ departmentName: "Civil" });
+    if (!List) {
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Civil List" });
+    } else {
+      res.status(200).json(List);
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.ListByElectricalDepartment = async (req, res) => {
+  try {
+    const List = await UserModel.find({ departmentName: "Electrical" });
+    if (!List) {
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Electrical List" });
+    } else {
+      res.status(200).json(List);
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.ListByTourismDepartment = async (req, res) => {
+  try {
+    const List = await UserModel.find({ departmentName: "Tourism" });
+    if (!List) {
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Tourism List" });
+    } else {
+      res.status(200).json(List);
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.ListByFoodDepartment = async (req, res) => {
+  try {
+    const List = await UserModel.find({ departmentName: "Food" });
+    if (!List) {
+      res
+        .status(500)
+        .json({ success: false, message: "Not found Food List" });
+    } else {
+      res.status(200).json(List);
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+
+// COUNT BY DEPARTMENT (COMPUTER/RAC/CIVIL/ELECTRICAL/TOURISM/FOOD)
+exports.CountByComputerDepartment = async (req, res) => {
+  try {
+    const Count = await UserModel.countDocuments({ departmentName: "Computer" });
+    if (!Count) {
+      res.status(500).json({ success: false ,message:"Not found Computer department"});
+    } else {
+      res.status(200).json({ Count });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.CountByRACDepartment = async (req, res) => {
+  try {
+    const Count = await UserModel.countDocuments({ departmentName: "RAC" });
+    if (!Count) {
+      res.status(500).json({ success: false ,message:"Not found RAC department"});
+    } else {
+      res.status(200).json({ Count });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.CountByCivilDepartment = async (req, res) => {
+  try {
+    const Count = await UserModel.countDocuments({ departmentName: "Civil" });
+    if (!Count) {
+      res.status(500).json({ success: false ,message:"Not found Civil department"});
+    } else {
+      res.status(200).json({ Count });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.CountByElectricalDepartment = async (req, res) => {
+  try {
+    const Count = await UserModel.countDocuments({ departmentName: "Electrical" });
+    if (!Count) {
+      res.status(500).json({ success: false ,message:"Not found Electrical department"});
+    } else {
+      res.status(200).json({ Count });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.CountByTourismDepartment = async (req, res) => {
+  try {
+    const Count = await UserModel.countDocuments({ departmentName: "Tourism" });
+    if (!Count) {
+      res.status(500).json({ success: false ,message:"Not found Tourism department"});
+    } else {
+      res.status(200).json({ Count });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+exports.CountByFoodDepartment = async (req, res) => {
+  try {
+    const Count = await UserModel.countDocuments({ departmentName: "Food" });
+    if (!Count) {
+      res.status(500).json({ success: false ,message:"Not found Food department"});
+    } else {
+      res.status(200).json({ Count });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+
+
+
+

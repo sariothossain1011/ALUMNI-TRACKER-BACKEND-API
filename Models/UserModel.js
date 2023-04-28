@@ -22,10 +22,10 @@ const UserSchema = new mongoose.Schema(
       // required: [true, "Enter your department name!"],
     },
     rollNumber: {
-      type: Number,
+      type: String,
     },
     registrationNumber: {
-      type: Number,
+      type: String,
     },
     email: {
       type: String,
@@ -38,7 +38,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
     whatsappNumber: {
-      type: Number,
+      type: String,
     },
     facebookLink: {
       type: String,
@@ -81,5 +81,5 @@ UserSchema.set("toJSON", {
   getters: true, // Use getters option instead
 });
 
-const UserModel = mongoose.model("user", UserSchema);
+const UserModel = mongoose.model("User", UserSchema);
 module.exports = UserModel;
