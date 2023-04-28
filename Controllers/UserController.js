@@ -69,10 +69,11 @@ exports.Login = async (req, res) => {
 // GET SINGLE USER  API
 exports.GetSingleUser = async (req, res) => {
   try {
-    const user = await UserModel.findOne(req.params.id).select("-password");
+    const id = req.params.id
+    const user = await UserModel.findById(id).select("-password");
     if (!user) {
       res
-        .status(500)
+        .status(400)
         .json({ success: false, message: "The user is not found" });
     } else {
       res.status(200).send(user);
@@ -85,7 +86,7 @@ exports.GetSingleUser = async (req, res) => {
 // // GET UPDATE USER  API
 exports.UpdateUser = async (req, res) => {
   try {
-    const id = req.params.Id;
+    const id = req.params.id;
     const postBody = req.body;
     const user = await UserModel.findByIdAndUpdate(id, postBody, {
       new: true,
@@ -100,29 +101,30 @@ exports.UpdateUser = async (req, res) => {
     return res.status(400).json({ success: false, message: error });
   }
 };
-// Create Product API
-exports.UserImageUpdate = async (req, res) => {
-  try {
-    const file = req.file;
-    if (!file) return res.status(400).send("No image in the request");
-    const fileName = req.file.filename;
-    const BasePath = `${req.protocol}://${req.get("host")}/Public/Uploads/`; //"http://localhost:3000/Public/Upload/
 
-    const user = await UserModel.updateOne({
-      image: `${BasePath}${fileName}`, //"http://localhost:3000/Public/Upload/image-210423"
-    });
-    if (!user) {
-      return res
-        .status(400)
-        .send({ success: false, message: "Image update fail " });
-    }
-    return res
-      .status(200)
-      .json({ success: true, message: "Image update Success " });
-  } catch (error) {
-    return res.status(400).json({ success: false, message: error });
-  }
-};
+// // Create Product API
+// exports.UserImageUpdate = async (req, res) => {
+//   try {
+//     const file = req.file;
+//     if (!file) return res.status(400).send("No image in the request");
+//     const fileName = req.file.filename;
+//     const BasePath = `${req.protocol}://${req.get("host")}/Public/Uploads/`; //"http://localhost:3000/Public/Upload/
+
+//     const user = await UserModel.updateOne({
+//       image: `${BasePath}${fileName}`, //"http://localhost:3000/Public/Upload/image-210423"
+//     });
+//     if (!user) {
+//       return res
+//         .status(400)
+//         .send({ success: false, message: "Image update fail " });
+//     }
+//     return res
+//       .status(200)
+//       .json({ success: true, message: "Image update Success " });
+//   } catch (error) {
+//     return res.status(400).json({ success: false, message: error });
+//   }
+// };
 
 // Delete User API
 exports.DeleteUser = async (req, res) => {
@@ -307,6 +309,20 @@ exports.UpdateUserStatus = async (req, res) => {
   UserModel.findByIdAndUpdate(id, { $set: { status: status } }, { new: true })
     .then((updatedUserStatus) => {
       res.status(200).json(updatedUserStatus);
+    })
+    .catch((error) => {
+      return res.status(400).json({ success: false, message: error });
+    });
+};
+
+// UPDATE IS ADMIN (USER TO ADMIN /ADMIN OT USER) API
+exports.UpdateIsAdmin = async (req, res) => {
+  const id = req.params.id;
+  const isAdmin = req.body.isAdmin;
+
+  UserModel.findByIdAndUpdate(id, { $set: { isAdmin: isAdmin } }, { new: true })
+    .then((UpdateIsAdmin) => {
+      res.status(200).json(UpdateIsAdmin);
     })
     .catch((error) => {
       return res.status(400).json({ success: false, message: error });

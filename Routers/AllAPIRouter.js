@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
+// const multer = require("multer");
 const {
   Registration,
   Login,
@@ -36,6 +36,7 @@ const {
   CountByElectricalDepartment,
   CountByTourismDepartment,
   CountByFoodDepartment,
+  UpdateIsAdmin,
 } = require("../Controllers/UserController");
 
 const { uploadImages } = require("../Controllers/profileImageUpload");
@@ -67,29 +68,32 @@ const imageUpload = require("../Middleware/imageUpload");
 
 router.post("/Registration", Registration);
 router.get("/Login", Login);
-router.get("/User/GetSingleUser/:Id", GetSingleUser);
-router.post("/User/UpdateUser/:Id", UpdateUser);
+router.get("/User/GetSingleUser/:id", GetSingleUser);
+router.post("/User/UpdateUser/:id", UpdateUser);
 // router.post(
 //   "/User/UserImageUpdate/:Id",
 //   UploadOptions.single("image"),
 //   UserImageUpdate
 // );
 
-router.post("/User/DeleteUser/:Id", DeleteUser);
+
+router.post("/Admin/DeleteUser/:Id", DeleteUser);
 router.get("/User/GetUserList", GetUserList);
 router.get("/User/TotalUserCount", TotalUserCount);
 
 // CHANGE USER STATUS (REQUEST/APPROVED)
-router.post("/User/UpdateUserStatus/:id/:status", UpdateUserStatus);
+router.post("/Admin/UpdateUserStatus/:id/:status", UpdateUserStatus);
 
 // CHANGE USER ROLE (STUDENT/TEACHER)
-router.post("/User/UpdateUserRole/:id/:role", UpdateUserRole);
+router.post("/Admin/UpdateUserRole/:id/:role", UpdateUserRole);
+
+// CHANGE IS ADMIN
+router.post("/Admin/UpdateIsAdmin/:id/:isAdmin", UpdateIsAdmin);
 
 router.post("/User/profileImage", imageUpload, uploadImages);
 
-router.post("/User/DeleteUser/:Id", DeleteUser);
-router.get("/User/GetUserList", GetUserList);
-router.get("/User/TotalUserCount", TotalUserCount);
+router.post("/DeleteUser/:Id", DeleteUser);
+
 
 // REQUEST COUNT AND LIST
 router.get("/User/UserRequestCount", UserRequestCount);
@@ -110,10 +114,7 @@ router.get("/User/TeacherList", TeacherList);
 // SEARCH BY DEPARTMENT / SESSION / (TEACHER / STUDENT) / NAME
 router.get("/User/SearchByDepartment/:keyword", SearchByDepartment);
 router.get("/User/SearchBySession/:session", SearchBySession);
-router.get(
-  "/User/SearchByTeacherAndStudent/:keyword",
-  SearchByTeacherAndStudent
-);
+router.get("/User/SearchByTeacherAndStudent/:keyword",SearchByTeacherAndStudent);
 router.get("/User/SearchByName/:keyword", SearchByName);
 
 //  LIST BY SINGLE DEPARTMENT
