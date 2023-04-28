@@ -5,27 +5,26 @@ const mongoose = require("mongoose");
 
 // USERS REGISTRATION API
 exports.Registration = async (req, res) => {
+  console.log(`req.body: ${req.body}`);
   try {
     const userItem = await UserModel({
       name: req.body.name,
-      fatherName: req.body.fatherName,
-      motherName: req.body.motherName,
-      image: req.body.image,
-      departmentName: req.body.departmentName,
-      rollNumber: req.body.rollNumber,
-      registrationNumber: req.body.registrationNumber,
+      // fatherName: "",
+      // motherName: "",
+      rollNumber: req.body.roll,
+      registrationNumber: req.body.registration,
       email: req.body.email,
-      session: req.body.session,
+      // session: "",
       mobile: req.body.mobile,
-      whatsappNumber: req.body.whatsappNumber,
-      facebookLink: req.body.facebookLink,
+      // whatsappNumber: "",
+      // facebookLink: "",
       password: bcrypt.hashSync(req.body.password, 10),
       status: req.body.status,
-      companyName: req.body.companyName,
-      jobPosition: req.body.jobPosition,
-      jobLocation: req.body.jobLocation,
+      // companyName: "",
+      // jobPosition: "",
+      // jobLocation: "",
       role: req.body.role,
-      isAdmin: req.body.isAdmin,
+      isAdmin: false,
     });
     const user = await userItem.save();
     if (!user) {
@@ -33,7 +32,7 @@ exports.Registration = async (req, res) => {
         .status(400)
         .send({ success: false, message: "Registration fail" });
     }
-    res.status(200).send(user);
+    res.status(200).json({ message: "success", user: user });
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
   }
@@ -101,28 +100,28 @@ exports.UpdateUser = async (req, res) => {
   }
 };
 // Create Product API
-exports.UserImageUpdate = async (req, res) => {
-  try {
-    const file = req.file;
-    if (!file) return res.status(400).send("No image in the request");
-    const fileName = req.file.filename;
-    const BasePath = `${req.protocol}://${req.get("host")}/Public/Uploads/`; //"http://localhost:3000/Public/Upload/
+// exports.UserImageUpdate = async (req, res) => {
+//   try {
+//     const file = req.file;
+//     if (!file) return res.status(400).send("No image in the request");
+//     const fileName = req.file.filename;
+//     const BasePath = `${req.protocol}://${req.get("host")}/Public/Uploads/`; //"http://localhost:3000/Public/Upload/
 
-    const user = await UserModel.updateOne({
-      image: `${BasePath}${fileName}`, //"http://localhost:3000/Public/Upload/image-210423"
-    });
-    if (!user) {
-      return res
-        .status(400)
-        .send({ success: false, message: "Image update fail " });
-    }
-    return res
-      .status(200)
-      .json({ success: true, message: "Image update Success " });
-  } catch (error) {
-    return res.status(400).json({ success: false, message: error });
-  }
-};
+//     const user = await UserModel.updateOne({
+//       image: `${BasePath}${fileName}`, //"http://localhost:3000/Public/Upload/image-210423"
+//     });
+//     if (!user) {
+//       return res
+//         .status(400)
+//         .send({ success: false, message: "Image update fail " });
+//     }
+//     return res
+//       .status(200)
+//       .json({ success: true, message: "Image update Success " });
+//   } catch (error) {
+//     return res.status(400).json({ success: false, message: error });
+//   }
+// };
 
 // Delete User API
 exports.DeleteUser = async (req, res) => {

@@ -15,35 +15,34 @@ const {
   UserRequestList,
   UserApprovedList,
   UpdateUserStatus,
-  UserImageUpdate,
 } = require("../Controllers/UserController");
 const { uploadImages } = require("../Controllers/profileImageUpload");
 const imageUpload = require("../Middleware/imageUpload");
 
 // MANAGE PHOTO WITH MULTER NPM PACKAGE
 
-const FILE_TYPE_MAP = {
-  "image/png": "png",
-  "image/jpeg": "jpeg",
-  "image/jpg": "jpg",
-};
+// const FILE_TYPE_MAP = {
+//   "image/png": "png",
+//   "image/jpeg": "jpeg",
+//   "image/jpg": "jpg",
+// };
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const IsValid = FILE_TYPE_MAP[file.mimetype];
-    let UploadError = new Error("Invalid Image Type ");
-    if (IsValid) {
-      UploadError = null;
-    }
-    cb(UploadError, "Public/Uploads");
-  },
-  filename: function (req, file, cb) {
-    const fileName = file.originalname.split(" ").join("-");
-    const extension = FILE_TYPE_MAP[file.mimetype];
-    cb(null, `${fileName}-${Date.now()}.${extension}`);
-  },
-});
-const UploadOptions = multer({ storage: storage });
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     const IsValid = FILE_TYPE_MAP[file.mimetype];
+//     let UploadError = new Error("Invalid Image Type ");
+//     if (IsValid) {
+//       UploadError = null;
+//     }
+//     cb(UploadError, "Public/Uploads");
+//   },
+//   filename: function (req, file, cb) {
+//     const fileName = file.originalname.split(" ").join("-");
+//     const extension = FILE_TYPE_MAP[file.mimetype];
+//     cb(null, `${fileName}-${Date.now()}.${extension}`);
+//   },
+// });
+// const UploadOptions = multer({ storage: storage });
 
 router.post("/Registration", Registration);
 router.get("/Login", Login);

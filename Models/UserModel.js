@@ -8,27 +8,24 @@ const UserSchema = new mongoose.Schema(
     },
     fatherName: {
       type: String,
-      default:"",
     },
     motherName: {
       type: String,
-      default:"",
     },
     image: {
       type: String,
-      default: "https://res.cloudinary.com/db8l1ulfq/image/upload/v1682591922/user-profile_tfugwz.png",
+      default:
+        "https://res.cloudinary.com/db8l1ulfq/image/upload/v1682591922/user-profile_tfugwz.png",
     },
     departmentName: {
       type: String,
-      required: [true, "Enter your department name!"],
+      // required: [true, "Enter your department name!"],
     },
     rollNumber: {
       type: Number,
-      default:"",
     },
     registrationNumber: {
       type: Number,
-      default:"",
     },
     email: {
       type: String,
@@ -36,19 +33,15 @@ const UserSchema = new mongoose.Schema(
     },
     session: {
       type: String,
-      required: [true, "Enter your session!"],
     },
     mobile: {
       type: String,
-      required: [true, "Enter your mobile number!"],
     },
-    whatsappNumber:{
+    whatsappNumber: {
       type: Number,
-      default:"",
     },
-    facebookLink:{
+    facebookLink: {
       type: String,
-      default:"",
     },
     password: {
       type: String,
@@ -60,26 +53,23 @@ const UserSchema = new mongoose.Schema(
     },
     companyName: {
       type: String,
-      default:"",
     },
     jobPosition: {
       type: String,
-      default:"",
     },
     jobLocation: {
       type: String,
-      default:"",
     },
-    role:{
-      type:String,
-      default:"student"
+    role: {
+      type: String,
+      default: "student",
     },
     isAdmin: {
       type: Boolean,
       default: false,
     },
   },
-  { timestamps: false, versionKey: false }
+  { timestamps: true, versionKey: false }
 );
 
 UserSchema.virtual("id").get(function () {
