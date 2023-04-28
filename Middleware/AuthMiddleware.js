@@ -1,7 +1,7 @@
 const { expressjwt } = require("express-jwt");
 
 function AuthMiddleware(req, res, next) {
-  const secret = process.env.SECRET_KEY;
+  const secret = process.env.TOKEN_SECRET;
   expressjwt({
     secret,
     algorithms: ["HS256"],
@@ -9,8 +9,10 @@ function AuthMiddleware(req, res, next) {
   }).unless({
     path: [
       {
-        url: /\/api\/v1\/User(.*)/,methods: ["GET","POST","OPTIONS"],
-        url: /\/api\/v1\/Teacher(.*)/,methods: ["GET","POST","OPTIONS"],
+        url: /\/api\/v1\/User(.*)/,
+        methods: ["GET", "POST", "OPTIONS"],
+        url: /\/api\/v1\/Teacher(.*)/,
+        methods: ["GET", "POST", "OPTIONS"],
       },
       "/api/v1/Registration",
       "/api/v1/Login",
@@ -39,9 +41,6 @@ async function isRevoked(req, token) {
   return false;
 }
 
-
-
-
 // async function isRevoked(req, token) {
 //   if (!token.payload.isAdmin) {
 //     return true;
@@ -50,18 +49,14 @@ async function isRevoked(req, token) {
 
 module.exports = AuthMiddleware;
 
-
-
 // async function isRevoked(req, token) {
 //   if (!token.payload.isAdmin) {
 //     return false; // User is not an admin, but not revoked
 //   }else{
 //     return true; // User is an admin, not revoked
 //   }
-  
+
 // }
-
-
 
 // async function isRevoked(req, token) {
 //   if (!token.payload.isAdmin) {
@@ -69,7 +64,6 @@ module.exports = AuthMiddleware;
 //   }
 //   return false;
 // }
-
 
 // async function isRevoked(req, token) {
 //   return new Promise((resolve, reject) => {
