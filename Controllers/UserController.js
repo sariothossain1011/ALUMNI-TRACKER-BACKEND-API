@@ -5,8 +5,8 @@ const mongoose = require("mongoose");
 
 // USERS REGISTRATION API
 exports.Registration = async (req, res) => {
-  console.log(`req.body: ${req.body}`);
   try {
+    console.log(`req.body: ${req.body}`);
     const existUser = await UserModel.findOne({ email: req.body.email });
     if (existUser) {
       return res
@@ -26,7 +26,6 @@ exports.Registration = async (req, res) => {
       whatsappNumber: "",
       facebookLink: "",
       password: bcrypt.hashSync(req.body.password, 10),
-      status: req.body.status,
       companyName: "",
       jobPosition: "",
       jobLocation: "",
