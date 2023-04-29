@@ -66,7 +66,7 @@ exports.Registration = async (req, res) => {
 exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log(req.body);
     const user = await UserModel.findOne({ email: email });
     if (!user) {
       return res.status(400).json("This user not found");
@@ -87,7 +87,7 @@ exports.Login = async (req, res) => {
       { expiresIn: "3d" }
     );
 
-    res.status(200).json({
+    res.send({
       id: user._id,
       image: user.image,
       name: user.name,
