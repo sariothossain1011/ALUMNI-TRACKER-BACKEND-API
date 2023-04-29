@@ -28,8 +28,10 @@ exports.Registration = async (req, res) => {
       companyName: "",
       jobPosition: "",
       jobLocation: "",
+      department: req.body.department,
       role: req.body.role,
       isAdmin: false,
+      gender: "",
     });
 
     const user = await userItem.save();
@@ -66,7 +68,6 @@ exports.Registration = async (req, res) => {
 exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
     const user = await UserModel.findOne({ email: email });
     if (!user) {
       return res.status(400).json("This user not found");
@@ -107,7 +108,7 @@ exports.Login = async (req, res) => {
 exports.GetSingleUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const user = await UserModel.findById(id).select("-password");
+    const user = await UserModel.findById({ _id: id }).select("-password");
     if (!user) {
       res
         .status(400)
@@ -123,8 +124,10 @@ exports.GetSingleUser = async (req, res) => {
 // // GET UPDATE USER  API
 exports.UpdateUser = async (req, res) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const postBody = req.body;
+
+    console.log(req.body);
     const user = await UserModel.findByIdAndUpdate(id, postBody, {
       new: true,
     }).select("-password");
@@ -133,7 +136,7 @@ exports.UpdateUser = async (req, res) => {
         .status(404)
         .send({ success: false, message: "The user not update !" });
     }
-    res.status(200).json({
+    const result = {
       id: user._id,
       image: user.image,
       name: user.name,
@@ -143,7 +146,8 @@ exports.UpdateUser = async (req, res) => {
       status: user.status,
       isAdmin: user.isAdmin,
       message: "success",
-    });
+    };
+    res.status(200).json({ user, result, message: "success" });
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
   }

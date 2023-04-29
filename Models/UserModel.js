@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema(
       default:
         "https://res.cloudinary.com/db8l1ulfq/image/upload/v1682591922/user-profile_tfugwz.png",
     },
-    departmentName: {
+    department: {
       type: String,
       // required: [true, "Enter your department name!"],
     },
@@ -58,6 +58,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
     jobLocation: {
+      type: String,
+    },
+    gender: {
       type: String,
     },
     role: {
