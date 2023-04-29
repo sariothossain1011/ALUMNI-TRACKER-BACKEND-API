@@ -67,7 +67,7 @@ const imageUpload = require("../Middleware/imageUpload");
 // const UploadOptions = multer({ storage: storage });
 
 router.post("/Registration", Registration);
-router.get("/Login", Login);
+router.post("/Login", Login);
 router.get("/User/GetSingleUser/:id", GetSingleUser);
 router.post("/User/UpdateUser/:id", UpdateUser);
 // router.post(
