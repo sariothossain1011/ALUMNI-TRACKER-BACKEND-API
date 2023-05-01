@@ -18,9 +18,9 @@ exports.RequireSignIn = (req, res, next) => {
 exports.IsAdmin = async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.user.id);
-        console.log(user)
-    console.log(user.isAdmin)
-    if ( user.isAdmin !== true) {
+        // console.log(user)
+    // console.log(user.isAdmin)
+    if (user && user.isAdmin !== true) {
       return res.status(401).send("Unauthorized");
     } else {
       next();
