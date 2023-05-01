@@ -22,10 +22,10 @@ const hpp = require('hpp');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(xssClean());
-app.use(expressMongoSanitize());
-app.use(helmet());
-app.use(hpp());
+// app.use(xssClean());
+// app.use(expressMongoSanitize());
+// app.use(helmet());
+// app.use(hpp());
 // app.use(AuthMiddleware)
 
 // app.use(ErrorHandler)
