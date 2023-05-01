@@ -65,7 +65,7 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "student",
+      default: "Student",
     },
     isAdmin: {
       type: Boolean,

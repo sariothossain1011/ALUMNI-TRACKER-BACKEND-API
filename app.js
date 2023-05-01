@@ -13,10 +13,12 @@ const xssClean = require('xss-clean');
 const expressMongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
-const AuthMiddleware = require('./Middleware/AuthMiddleware');
+// const AuthMiddleware = require('./Middleware/AuthMiddleware');
+// const ErrorHandler = require('./Middleware/ErrorHandler');
+
 
 //security middleware implement
-app.use('/Public/Uploads',express.static(__dirname + '/Public/Uploads'));
+// app.use('/Public/Uploads',express.static(__dirname + '/Public/Uploads'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
@@ -24,7 +26,18 @@ app.use(xssClean());
 app.use(expressMongoSanitize());
 app.use(helmet());
 app.use(hpp());
-app.use(AuthMiddleware)
+// app.use(AuthMiddleware)
+
+// app.use(ErrorHandler)
+// app.use((err, req, res, next) => {
+// 	if (err) {
+// 		res.status(500).json({ message:"The Server Error Here"});
+// 	}
+// });
+
+
+
+
 
 // request rate limiting 
 const limiter = rateLimit({
