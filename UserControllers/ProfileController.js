@@ -11,7 +11,7 @@ exports.GetSingleUser = async (req, res) => {
           .status(400)
           .json({ success: false, message: "The user is not found" });
       } else {
-        res.status(200).send(user);
+        res.status(200).json({success:true,message:"success",user});
       }
     } catch (error) {
       return res.status(400).json({ success: false, message: error });
