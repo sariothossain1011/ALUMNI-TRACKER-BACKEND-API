@@ -1,22 +1,21 @@
-const jwt = require('jsonwebtoken')
-const UserModel =require("../Models/UserModel");
-
+const jwt = require("jsonwebtoken");
+const UserModel = require("../Models/UserModel");
 
 exports.RequireSignIn = (req, res, next) => {
   try {
-    const decoded = jwt.verify(
-      req.headers.token,
-      process.env.TOKEN_SECRET
-    );
+   let tmp = req.header("Authorization");
+   const token = tmp && tmp.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
     req.user = decoded;
     next();
   } catch (err) {
-    return res.status(401).json({status:false ,message: err});
+    return res.status(500).json({ message: err.message });
   }
 };
 
 exports.IsAdmin = async (req, res, next) => {
   try {
+    console.log(req.user);
     const user = await UserModel.findById(req.user.id);
     if (user && user.isAdmin !== true) {
       return res.status(401).send("Unauthorized");
@@ -24,11 +23,9 @@ exports.IsAdmin = async (req, res, next) => {
       next();
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
-
-
 
 // exports.IsAdmin = async (req, res, next) => {
 //   try {
@@ -44,13 +41,6 @@ exports.IsAdmin = async (req, res, next) => {
 //     console.log(err)
 //   }
 // };
-
-
-
-
-
-
-
 
 // exports.IsAdmin = async (req, res, next) => {
 //   try {
@@ -70,44 +60,6 @@ exports.IsAdmin = async (req, res, next) => {
 //     return res.status(401).send("You must be an admin");
 //   }
 // };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // const { expressjwt } = require("express-jwt");
 
@@ -135,20 +87,10 @@ exports.IsAdmin = async (req, res, next) => {
 //   });
 // }
 
-
 // async function isRevoked(req, token) {
 //   // return false to indicate that the token is not revoked
 //   return false;
 // }
-
-
-
-
-
-
-
-
-
 
 // // const { expressjwt } = require("express-jwt");
 
@@ -172,15 +114,10 @@ exports.IsAdmin = async (req, res, next) => {
 // //   if(!token.payload.isAdmin) {
 // //      return true;
 // //   }
-  
+
 // // }
 
-
-
-
-
 // module.exports = AuthMiddleware;
-
 
 // // async function isRevoked(req, payload, done) {
 // //   if (!payload.isAdmin) {
@@ -188,7 +125,6 @@ exports.IsAdmin = async (req, res, next) => {
 // //   }
 // //   return done(null, false);
 // // }
-
 
 // // }).unless({
 // //   path: [

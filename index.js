@@ -1,7 +1,6 @@
-const app = require('./app')
+const app = require("./app");
 
-
-const port = process.env.PORT || 5001
-app.listen(port,()=>{
-    console.log(`Server is runing at http://localhost:${port}`)
-})
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`Server is runing at http://localhost:${port}`);
+});

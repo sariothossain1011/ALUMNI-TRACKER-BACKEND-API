@@ -29,11 +29,11 @@ app.use(hpp());
 // app.use(AuthMiddleware)
 
 // app.use(ErrorHandler)
-// app.use((err, req, res, next) => {
-// 	if (err) {
-// 		res.status(500).json({ message:"The Server Error Here"});
-// 	}
-// });
+app.use((err, req, res, next) => {
+	if (err) {
+		res.status(500).json({ message:"The Server Error Here"});
+	}
+});
 
 
 
