@@ -73,7 +73,7 @@ exports.Login = async (req, res) => {
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = jwt.sign(
         {
-          userId: user.id,
+          id: user.id,
           isAdmin: user.isAdmin,
         },
         process.env.TOKEN_SECRET,
