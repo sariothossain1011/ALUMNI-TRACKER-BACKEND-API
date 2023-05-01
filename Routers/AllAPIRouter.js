@@ -69,7 +69,7 @@ const imageUpload = require("../Middleware/imageUpload");
 router.post("/Registration", Registration);
 router.post("/Login", Login);
 router.get("/User/GetSingleUser/:id", GetSingleUser);
-router.post("/User/UpdateUser/:id", UpdateUser);
+router.put("/User/UpdateUser/:id", UpdateUser);
 // router.post(
 //   "/User/UserImageUpdate/:Id",
 //   UploadOptions.single("image"),

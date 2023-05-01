@@ -28,8 +28,10 @@ exports.Registration = async (req, res) => {
       companyName: "",
       jobPosition: "",
       jobLocation: "",
+      department: req.body.department,
       role: req.body.role,
       isAdmin: false,
+      gender: "",
     });
 
     const user = await userItem.save();
@@ -66,7 +68,6 @@ exports.Registration = async (req, res) => {
 exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
     const user = await UserModel.findOne({ email: email });
     if (!user) {
       return res.status(400).json("This user not found");
@@ -107,7 +108,7 @@ exports.Login = async (req, res) => {
 exports.GetSingleUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const user = await UserModel.findById(id).select("-password");
+    const user = await UserModel.findById({ _id: id }).select("-password");
     if (!user) {
       res
         .status(400)
@@ -123,9 +124,9 @@ exports.GetSingleUser = async (req, res) => {
 // // GET UPDATE USER  API
 exports.UpdateUser = async (req, res) => {
   try {
-    const id = req.params.id;
-    const postBody = req.body;
-    const user = await UserModel.findByIdAndUpdate(id, postBody, {
+    const { id } = req.params;
+    console.log(req.body);
+    const user = await UserModel.findByIdAndUpdate(id, req.body, {
       new: true,
     }).select("-password");
     if (!user) {
@@ -133,19 +134,10 @@ exports.UpdateUser = async (req, res) => {
         .status(404)
         .send({ success: false, message: "The user not update !" });
     }
-    res.status(200).json({
-      id: user._id,
-      image: user.image,
-      name: user.name,
-      token: token,
-      email: user.email,
-      role: user.role,
-      status: user.status,
-      isAdmin: user.isAdmin,
-      message: "success",
-    });
+
+    res.status(200).json({ user, message: "success" });
   } catch (error) {
-    return res.status(400).json({ success: false, message: error });
+    return res.status(500).json({ success: false, message: error });
   }
 };
 
@@ -197,12 +189,13 @@ exports.DeleteUser = async (req, res) => {
 // GET Get User List  API
 exports.GetUserList = async (req, res) => {
   try {
-    const userList = await UserModel.find().select("name email phone");
+    const userList = await UserModel.find({}).select(
+      "name email mobile facebookLink whatsappNumber role department jobPosition session"
+    );
     if (!userList) {
       res.status(500).json({ success: false });
-    } else {
-      res.send(userList);
     }
+    res.json({ users: userList, message: "success" });
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
   }
