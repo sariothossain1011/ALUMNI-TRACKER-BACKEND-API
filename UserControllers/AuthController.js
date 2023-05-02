@@ -65,35 +65,37 @@ exports.Registration = async (req, res) => {
 exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await UserModel.findOne({ email: email });
     if (!user) {
       return res.status(400).json("This user not found");
     }
-    if (user && bcrypt.compareSync(password, user.password)) {
-      const token = jwt.sign(
-        {
-          userId: user.id,
-          isAdmin: user.isAdmin,
-        },
-        process.env.TOKEN_SECRET,
-        { expiresIn: "3d" }
-      );
-
-      res.status(200).json({
-        id: user._id,
-        image: user.image,
-        name: user.name,
-        token: token,
-        email: user.email,
-        role: user.role,
-        status: user.status,
-        isAdmin: user.isAdmin,
-        message: "success",
+    const check = await bcrypt.compareSync(password, user.password);
+    if (!check) {
+      return res.status(400).json({
+        message: "Invalid credentials. Please try again",
       });
-    } else {
-      res.status(400).json("Email or Password is wrong");
     }
+
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        isAdmin: user.isAdmin,
+      },
+      process.env.TOKEN_SECRET,
+      { expiresIn: "3d" }
+    );
+
+    res.send({
+      id: user._id,
+      image: user.image,
+      name: user.name,
+      token: token,
+      email: user.email,
+      role: user.role,
+      status: user.status,
+      isAdmin: user.isAdmin,
+      message: "success",
+    });
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
   }

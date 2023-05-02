@@ -3,7 +3,8 @@ const UserModel = require("../Models/UserModel");
 // LIST BY DEPARTMENT (COMPUTER/RAC/CIVIL/ELECTRICAL/TOURISM/FOOD)
 exports.ListByComputerDepartment = async (req, res) => {
   try {
-    const List = await UserModel.find({ departmentName: "Computer" });
+    const List = await UserModel.find({ department: "CMT" });
+    console.log(List);
     if (!List) {
       res
         .status(500)
@@ -17,7 +18,7 @@ exports.ListByComputerDepartment = async (req, res) => {
 };
 exports.ListByRACDepartment = async (req, res) => {
   try {
-    const List = await UserModel.find({ departmentName: "RAC" });
+    const List = await UserModel.find({ department: "RAC" });
     if (!List) {
       res.status(500).json({ success: false, message: "Not found RAC List" });
     } else {
@@ -29,7 +30,7 @@ exports.ListByRACDepartment = async (req, res) => {
 };
 exports.ListByCivilDepartment = async (req, res) => {
   try {
-    const List = await UserModel.find({ departmentName: "Civil" });
+    const List = await UserModel.find({ department: "CT" });
     if (!List) {
       res.status(500).json({ success: false, message: "Not found Civil List" });
     } else {
@@ -41,7 +42,7 @@ exports.ListByCivilDepartment = async (req, res) => {
 };
 exports.ListByElectricalDepartment = async (req, res) => {
   try {
-    const List = await UserModel.find({ departmentName: "Electrical" });
+    const List = await UserModel.find({ department: "ET" });
     if (!List) {
       res
         .status(500)
@@ -55,7 +56,7 @@ exports.ListByElectricalDepartment = async (req, res) => {
 };
 exports.ListByTourismDepartment = async (req, res) => {
   try {
-    const List = await UserModel.find({ departmentName: "Tourism" });
+    const List = await UserModel.find({ department: "THM" });
     if (!List) {
       res
         .status(500)
@@ -69,7 +70,7 @@ exports.ListByTourismDepartment = async (req, res) => {
 };
 exports.ListByFoodDepartment = async (req, res) => {
   try {
-    const List = await UserModel.find({ departmentName: "Food" });
+    const List = await UserModel.find({ department: "FT" });
     if (!List) {
       res.status(500).json({ success: false, message: "Not found Food List" });
     } else {
@@ -84,7 +85,7 @@ exports.ListByFoodDepartment = async (req, res) => {
 exports.CountByComputerDepartment = async (req, res) => {
   try {
     const Count = await UserModel.countDocuments({
-      departmentName: "Computer",
+      department: "CMT",
     });
     if (!Count) {
       res
@@ -99,7 +100,7 @@ exports.CountByComputerDepartment = async (req, res) => {
 };
 exports.CountByRACDepartment = async (req, res) => {
   try {
-    const Count = await UserModel.countDocuments({ departmentName: "RAC" });
+    const Count = await UserModel.countDocuments({ department: "RAC" });
     if (!Count) {
       res
         .status(500)
@@ -113,7 +114,7 @@ exports.CountByRACDepartment = async (req, res) => {
 };
 exports.CountByCivilDepartment = async (req, res) => {
   try {
-    const Count = await UserModel.countDocuments({ departmentName: "Civil" });
+    const Count = await UserModel.countDocuments({ department: "CT" });
     if (!Count) {
       res
         .status(500)
@@ -128,7 +129,7 @@ exports.CountByCivilDepartment = async (req, res) => {
 exports.CountByElectricalDepartment = async (req, res) => {
   try {
     const Count = await UserModel.countDocuments({
-      departmentName: "Electrical",
+      department: "ET",
     });
     if (!Count) {
       res
@@ -143,7 +144,7 @@ exports.CountByElectricalDepartment = async (req, res) => {
 };
 exports.CountByTourismDepartment = async (req, res) => {
   try {
-    const Count = await UserModel.countDocuments({ departmentName: "Tourism" });
+    const Count = await UserModel.countDocuments({ department: "Tourism" });
     if (!Count) {
       res
         .status(500)
@@ -157,7 +158,7 @@ exports.CountByTourismDepartment = async (req, res) => {
 };
 exports.CountByFoodDepartment = async (req, res) => {
   try {
-    const Count = await UserModel.countDocuments({ departmentName: "Food" });
+    const Count = await UserModel.countDocuments({ department: "Food" });
     if (!Count) {
       res
         .status(500)
