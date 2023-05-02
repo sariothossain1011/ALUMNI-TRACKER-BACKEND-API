@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 router.post("/Registration", Registration);
-router.get("/Login", Login);
+router.post("/Login", Login);
 
 
 

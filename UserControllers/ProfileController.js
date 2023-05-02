@@ -4,7 +4,9 @@ const UserModel = require("../Models/UserModel");
 exports.GetSingleUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const user = await UserModel.findOne({ _id: id }).select("-password");
+    const user = await UserModel.findOne({ _id: id }).select(
+      "-password -createdAt -updatedAt"
+    );
     console.log(user);
     if (!user) {
       res
