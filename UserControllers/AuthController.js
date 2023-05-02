@@ -78,14 +78,14 @@ exports.Login = async (req, res) => {
 
     const token = jwt.sign(
       {
-        userId: user.id,
+        id: user.id,
         isAdmin: user.isAdmin,
       },
       process.env.TOKEN_SECRET,
       { expiresIn: "3d" }
     );
 
-    res.send({
+    res.status(200).json({
       id: user._id,
       image: user.image,
       name: user.name,
