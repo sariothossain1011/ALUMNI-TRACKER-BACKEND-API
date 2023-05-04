@@ -29,6 +29,7 @@ exports.Registration = async (req, res) => {
       jobLocation: "",
       role: req.body.role,
       isAdmin: false,
+      position: req.body.position,
     });
 
     const user = await userItem.save();
