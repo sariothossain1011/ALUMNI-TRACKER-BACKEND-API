@@ -67,6 +67,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "Student",
     },
+    position: {
+      type: String,
+    },
     isAdmin: {
       type: Boolean,
       default: false,
