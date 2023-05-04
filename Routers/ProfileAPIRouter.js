@@ -4,7 +4,6 @@ const {
   UpdateUser,
 } = require("../UserControllers/ProfileController");
 const { RequireSignIn } = require("../Middleware/AuthMiddleware");
-const imageUpload = require("../Middleware/imageUpload");
 const router = express.Router();
 
 router.get("/GetSingleUser/:id", RequireSignIn, GetSingleUser);
