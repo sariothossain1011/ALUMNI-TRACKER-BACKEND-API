@@ -15,7 +15,7 @@ exports.RecoverVerifyEmail = async(req,res)=>{
             await OTPModel.create({email: email, otp: OTPCode})
             // send email
             let SendEmail = await SendEmailUtility(email," Your PIN Code is-" + OTPCode,"ALUMNI TRACKER APPS PIN Verification " )
-            res.status(200).json({status:"success",data:SendEmail})
+            return res.status(200).json({status:"success",data:SendEmail})
         }else{
             res.status(400).json({status:"No User Found",})
         }

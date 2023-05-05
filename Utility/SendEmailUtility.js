@@ -1,14 +1,14 @@
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+
 const SendEmailUtility =async(EmailTo,EmailText,EmailSubject)=>{
 
     let transporter = nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
         port: 587,
-        secure:true,
+        secure:false,
         auth:{
             user:process.env.EMAIL_OUTLOOK,
             pass: process.env.PASSWORD_OUTLOOK,
-
         },
         tls: {
             rejectUnauthorized: false,
@@ -16,7 +16,7 @@ const SendEmailUtility =async(EmailTo,EmailText,EmailSubject)=>{
     })
     
     let mailOptions = {
-        from:'ALUMNI TRACKER APPS <sariothossain1011@outlook.com>',
+        from:'ALUMNI TRACER APPS <sariothossain1011@outlook.com>',
         to: EmailTo,
         subject: EmailSubject,
         text:EmailText,
