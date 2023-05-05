@@ -126,7 +126,7 @@ exports.StudentCount = async (req, res) => {
 // USER TEACHER LIST API
 exports.TeacherList = async (req, res) => {
   try {
-    const TeacherList = await UserModel.find({ role: "Teacher" });
+    const TeacherList = await UserModel.find({ role: "teacher" });
     if (!TeacherList) {
       res
         .status(500)
