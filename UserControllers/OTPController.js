@@ -8,7 +8,7 @@ exports.RecoverVerifyEmail = async(req,res)=>{
     let email = req.params.email;
     let OTPCode = Math.floor(100000 + Math.random() * 900000)
     try {
-        // email account qurey 
+        // email account query 
         let UserCount =(await UserModel.aggregate([{$match: {email: email}}, {$count: "total"}]))
         if(UserCount.length>0){
             // OTP insert
