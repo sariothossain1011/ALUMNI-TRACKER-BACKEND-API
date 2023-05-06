@@ -3,20 +3,19 @@ const nodemailer = require('nodemailer');
 const SendEmailUtility =async(EmailTo,EmailText,EmailSubject)=>{
 
     let transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: 587,
-        secure:true,
-        auth:{
-            user:process.env.EMAIL_OUTLOOK,
-            pass: process.env.PASSWORD_OUTLOOK,
+        host: 'mail.teamrabbil.com',
+        port: 25,
+        secure: true,
+        auth: {
+            user: "info@teamrabbil.com",
+            pass: '~sR4[bhaC[Qs'
+        },tls: {
+            rejectUnauthorized: false
         },
-        tls: {
-            rejectUnauthorized: false,
-        }
-    })
+    });
     
     let mailOptions = {
-        from:'ALUMNI TRACER APPS <sariothossain1011@outlook.com>',
+        from: 'Inventory <info@teamrabbil.com>',
         to: EmailTo,
         subject: EmailSubject,
         text:EmailText,
