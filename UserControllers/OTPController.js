@@ -1,12 +1,12 @@
 const OTPModel = require("../Models/OTPModel");
 const UserModel = require("../Models/UserModel");
 const SendEmailUtility = require("../Utility/SendEmailUtility");
-
+const bcrypt = require('bcrypt');
 
 
 exports.RecoverVerifyEmail = async(req,res)=>{
     let email = req.params.email;
-    let OTPCode = Math.floor(100000 + Math.random() * 900000)
+    let OTPCode = Math.floor(10000 + Math.random() * 90000)
     try {
         // email account query 
         let UserCount =(await UserModel.aggregate([{$match: {email: email}}, {$count: "total"}]))
@@ -53,7 +53,7 @@ exports.RecoverResetPass = async(req,res)=>{
     try {
         let OTPCount =(await OTPModel.aggregate([{$match: {email: email,otp:OTPCode,status:statusUpdate}}, {$count: "total"}]))
         if(OTPCount.length>0){
-            let UpdatePass = await UserModel.updateOne({email:email},{password:NewPass});
+            let UpdatePass = await UserModel.updateOne({email:email},{password:bcrypt.hashSync(NewPass,10)});
             res.status(200).json({status:"success",data:UpdatePass})
         }else{
             res.status(400).json({status:"fail",data:"Invalid OTP Code"})
