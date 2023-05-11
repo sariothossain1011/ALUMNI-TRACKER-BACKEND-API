@@ -1,6 +1,5 @@
 const UserModel = require("../Models/UserModel");
 
-
 // GET Get User List  API
 exports.GetUserList = async (req, res) => {
   try {
@@ -27,7 +26,6 @@ exports.TotalUserCount = async (req, res) => {
     return res.status(400).json({ success: false, message: error });
   }
 };
-
 
 // USER REQUEST API
 exports.UserRequestCount = async (req, res) => {
@@ -57,7 +55,6 @@ exports.UserRequestList = async (req, res) => {
     return res.status(400).json({ success: false, message: error });
   }
 };
-
 
 // USER REQUEST COUNT API
 exports.UserApprovedCount = async (req, res) => {
@@ -90,11 +87,10 @@ exports.UserApprovedList = async (req, res) => {
   }
 };
 
-
 // USER STUDENT LIST API
 exports.StudentList = async (req, res) => {
   try {
-    const StudentList = await UserModel.find({ role: "Student" });
+    const StudentList = await UserModel.find({ role: "student" });
     if (!StudentList) {
       res
         .status(500)
@@ -110,7 +106,7 @@ exports.StudentList = async (req, res) => {
 exports.StudentCount = async (req, res) => {
   try {
     const StudentCount = await UserModel.countDocuments({
-      role: "Student",
+      role: "student",
     });
     if (!StudentCount) {
       res.status(500).json({ success: false });
@@ -121,7 +117,6 @@ exports.StudentCount = async (req, res) => {
     return res.status(400).json({ success: false, message: error });
   }
 };
-
 
 // USER TEACHER LIST API
 exports.TeacherList = async (req, res) => {
@@ -142,7 +137,7 @@ exports.TeacherList = async (req, res) => {
 exports.TeacherCount = async (req, res) => {
   try {
     const TeacherCount = await UserModel.countDocuments({
-      role: "Teacher",
+      role: "teacher",
     });
     if (!TeacherCount) {
       res.status(500).json({ success: false });
