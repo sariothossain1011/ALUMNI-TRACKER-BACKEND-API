@@ -155,7 +155,7 @@ exports.CountByElectricalDepartment = async (req, res) => {
 };
 exports.CountByTourismDepartment = async (req, res) => {
   try {
-    const Count = await UserModel.countDocuments({ department: "Tourism" });
+    const Count = await UserModel.countDocuments({ department: "THM" });
     if (!Count) {
       res
         .status(500)
@@ -169,7 +169,7 @@ exports.CountByTourismDepartment = async (req, res) => {
 };
 exports.CountByFoodDepartment = async (req, res) => {
   try {
-    const Count = await UserModel.countDocuments({ department: "Food" });
+    const Count = await UserModel.countDocuments({ department: "FT" });
     if (!Count) {
       res
         .status(500)
