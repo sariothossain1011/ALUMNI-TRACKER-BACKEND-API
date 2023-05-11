@@ -105,9 +105,7 @@ exports.StudentList = async (req, res) => {
 // USER STUDENT COUNT API
 exports.StudentCount = async (req, res) => {
   try {
-    const StudentCount = await UserModel.countDocuments({
-      role: "student",
-    });
+    const StudentCount = await UserModel.countDocuments({ role: "student" });
     if (!StudentCount) {
       res.status(500).json({ success: false });
     } else {
