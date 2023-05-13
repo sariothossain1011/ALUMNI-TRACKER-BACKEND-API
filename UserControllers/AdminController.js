@@ -5,17 +5,9 @@ exports.DeleteUser = async (req, res) => {
     try {
       const user = await UserModel.findById(req.params.id);
       if (!user) return res.status(400).send("Invalid User");
-      await UserModel.deleteOne({ id: req.params.id }).then((user) => {
-        if (user) {
-          return res
-            .status(200)
-            .send({ success: true, message: "User is deleted!" });
-        } else {
-          return res
-            .status(400)
-            .send({ success: false, message: "User delete fail!" });
-        }
-      });
+      const result =  await UserModel.findByIdAndRemove({_id: req.params.id})
+      res.status(200).json({message: "successful", data:result})
+    
     } catch (error) {
       return res.status(400).json({ success: false, message: error });
     }
