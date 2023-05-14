@@ -60,7 +60,7 @@ exports.UserRequestList = async (req, res) => {
 exports.UserApprovedCount = async (req, res) => {
   try {
     const ApprovedCount = await UserModel.countDocuments({
-      status: "Approved",
+      status: "Approve",
     });
     if (!ApprovedCount) {
       res.status(500).json({ success: false });
@@ -74,7 +74,7 @@ exports.UserApprovedCount = async (req, res) => {
 // USER APPROVED LIST
 exports.UserApprovedList = async (req, res) => {
   try {
-    const ApprovedList = await UserModel.find({ status: "Approved" });
+    const ApprovedList = await UserModel.find({ status: "Approve" });
     if (!ApprovedList) {
       res
         .status(500)
