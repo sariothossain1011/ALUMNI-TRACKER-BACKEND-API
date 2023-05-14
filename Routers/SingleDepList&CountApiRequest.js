@@ -13,7 +13,7 @@ const {
   CountByElectricalDepartment,
   CountByTourismDepartment,
   CountByFoodDepartment,
-} = require("../UserControllers/SingleDepList&CountController");
+} = require("../Controllers/SingleDepList&CountController");
 
 const router = express.Router();
 

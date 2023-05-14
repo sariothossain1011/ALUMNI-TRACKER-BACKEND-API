@@ -1,6 +1,7 @@
 const express = require("express");
 const { RequireSignIn, IsAdmin } = require("../Middleware/AuthMiddleware");
-const { DeleteUser, UpdateUserStatus, UpdateUserRole, UpdateIsAdmin } = require("../UserControllers/AdminController");
+const { DeleteUser, UpdateUserStatus, UpdateUserRole, UpdateIsAdmin } = require("../Controllers/AdminController");
+const { AdminList } = require("../Controllers/AdminController");
 const router = express.Router();
 
 
@@ -15,6 +16,9 @@ router.post("/UpdateUserRole/:id/:role",RequireSignIn,IsAdmin, UpdateUserRole);
 
 // CHANGE IS ADMIN
 router.post("/UpdateIsAdmin/:id/:isAdmin",RequireSignIn,IsAdmin, UpdateIsAdmin);
+
+//  ADMIN LIST 
+router.get("/AdminList",RequireSignIn,IsAdmin, AdminList);
 
 router.get("/auth-check", RequireSignIn, (req, res) => {
     res.json({ ok: true });

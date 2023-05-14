@@ -1,5 +1,5 @@
 const express = require('express');
-const { RecoverVerifyEmail, RecoverResetPass, RecoverVerifyOTP } = require('../UserControllers/OTPController');
+const { RecoverVerifyEmail, RecoverResetPass, RecoverVerifyOTP } = require('../Controllers/OTPController');
 const router = express.Router()
 
 

@@ -2,7 +2,7 @@ const express = require("express");
 const {
   GetSingleUser,
   UpdateUser,
-} = require("../UserControllers/ProfileController");
+} = require("../Controllers/ProfileController");
 const { RequireSignIn } = require("../Middleware/AuthMiddleware");
 const router = express.Router();
 
