@@ -65,7 +65,7 @@ exports.UserApprovedCount = async (req, res) => {
     if (!ApprovedCount) {
       res.status(500).json({ success: false });
     } else {
-      res.status(200).json( ApprovedCount );
+      res.status(200).json({ ApprovedCount} );
     }
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
@@ -80,7 +80,7 @@ exports.UserApprovedList = async (req, res) => {
         .status(500)
         .json({ success: false, message: "Not found Approved List" });
     } else {
-      res.status(200).json({ ApprovedList });
+      res.status(200).json( ApprovedList );
     }
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
