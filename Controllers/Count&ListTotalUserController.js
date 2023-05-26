@@ -90,7 +90,7 @@ exports.UserApprovedList = async (req, res) => {
 // USER STUDENT LIST API
 exports.StudentList = async (req, res) => {
   try {
-    const StudentList = await UserModel.find({ role: "student" });
+    const StudentList = await UserModel.find({ role: "student" }).sort({ createdAt: -1 });
     if (!StudentList) {
       res
         .status(500)
@@ -119,7 +119,7 @@ exports.StudentCount = async (req, res) => {
 // USER TEACHER LIST API
 exports.TeacherList = async (req, res) => {
   try {
-    const TeacherList = await UserModel.find({ role: "teacher" });
+    const TeacherList = await UserModel.find({ role: "teacher" }).sort({ createdAt: -1 });
     if (!TeacherList) {
       res
         .status(500)
