@@ -9,7 +9,7 @@ exports.SearchByDepartment = async (req, res) => {
     }).select("-password");
     res.json(results);
   } catch (error) {
-    console.log(error.message);
+    return res.status(400).send(error.message);
   }
 };
 
@@ -22,7 +22,7 @@ exports.SearchBySession = async (req, res) => {
     );
     res.json(results);
   } catch (error) {
-    console.log(error.message);
+    return res.status(400).send(error.message);
   }
 };
 
@@ -35,7 +35,7 @@ exports.SearchByTeacherAndStudent = async (req, res) => {
     }).select("-password");
     res.json(results);
   } catch (error) {
-    console.log(error.message);
+    return res.status(400).send(error.message);
   }
 };
 
@@ -62,7 +62,7 @@ exports.SearchByName = async (req, res) => {
     }).select("-password");
     res.json(results);
   } catch (error) {
-    console.log(error.message);
+    return res.status(400).send(error.message);
   }
 };
 

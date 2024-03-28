@@ -16,7 +16,7 @@ const SendEmailUtility =async(EmailTo,EmailText,EmailSubject)=>{
     })
     
     let mailOptions = {
-        from:' TASK MANAGER <sariothossainweb1011@outlook.com>',
+        from:'ALUMNI TRACKER APP <sariothossainweb1011@outlook.com>',
         to: EmailTo,
         subject: EmailSubject,
         text:EmailText,

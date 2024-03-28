@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 // USER REGISTRATION API
 exports.Registration = async (req, res) => {
   try {
-    console.log(`req.body: ${req.body}`);
+
     const existUser = await UserModel.findOne({ email: req.body.email });
     if (existUser) {
       return res
@@ -45,7 +45,7 @@ exports.Registration = async (req, res) => {
         isAdmin: user.isAdmin,
       },
       process.env.TOKEN_SECRET,
-      { expiresIn: "3d" }
+      { expiresIn: "7d" }
     );
     res.status(200).json({
       id: user._id,
