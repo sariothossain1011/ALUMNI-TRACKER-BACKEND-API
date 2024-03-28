@@ -25,7 +25,7 @@ exports.CreateBlog = async (req, res) => {
         .status(400)
         .send({ success: false, message: "Blog Create Fail!" });
     }
-    return res.status(200).json({ success: false, data: blog });
+    return res.status(200).json({ success: true, data: blog });
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
   }
@@ -42,7 +42,7 @@ exports.GetBlog = async (req, res) => {
         .status(400)
         .json({ success: false, message: "The blog is not found" });
     } else {
-      res.status(200).json({ success: true, message: "success", blog });
+      res.status(200).json({ success: true, message: blog });
     }
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
@@ -82,6 +82,24 @@ exports.DeleteBlog = async (req, res) => {
           .send({ success: false, message: "Blog delete fail!" });
       }
     });
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
+
+
+exports.FindBlogByUserId = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const blog = await BlogModel.find({ author: id })
+
+    if (!blog) {
+      res
+        .status(400)
+        .json({ success: false, message: "you have no blog post" });
+    } else {
+      res.status(200).json({ success: true, message: blog });
+    }
   } catch (error) {
     return res.status(400).json({ success: false, message: error });
   }
