@@ -31,6 +31,21 @@ exports.CreateBlog = async (req, res) => {
   }
 };
 
+exports.GetAllBlog = async (req, res) => {
+  try {
+    const blog = await BlogModel.find().populate()
+
+    if (!blog) {
+      res
+        .status(400)
+        .json({ success: false, message: "Not found blog" });
+    } else {
+      res.status(200).json({ success: true, message: blog });
+    }
+  } catch (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+};
 
 exports.GetBlog = async (req, res) => {
   try {
